@@ -3,10 +3,12 @@ package com.pluralsight.candycoded;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,20 @@ public class DetailActivity extends AppCompatActivity {
     public static final String SHARE_DESCRIPTION = "Look at this delicious candy from Candy Coded - ";
     public static final String HASHTAG_CANDYCODED = " #candycoded";
     String mCandyImageUrl = "";
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        createShareIntent();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void createShareIntent(){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setData(Uri.parse("text/plain"));
+        String shareString = SHARE_DESCRIPTION + mCandyImageUrl + HASHTAG_CANDYCODED;
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareString);
+        startActivity(shareIntent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +62,16 @@ public class DetailActivity extends AppCompatActivity {
                     CandyEntry.COLUMN_NAME_DESC));
 
 
-            TextView textView = (TextView) this.findViewById(R.id.text_view_name);
+            TextView textView =  this.findViewById(R.id.text_view_name);
             textView.setText(candyName);
 
-            TextView textViewPrice = (TextView) this.findViewById(R.id.text_view_price);
+            TextView textViewPrice =  this.findViewById(R.id.text_view_price);
             textViewPrice.setText(candyPrice);
 
-            TextView textViewDesc = (TextView) this.findViewById(R.id.text_view_desc);
+            TextView textViewDesc =  this.findViewById(R.id.text_view_desc);
             textViewDesc.setText(candyDesc);
 
-            ImageView imageView = (ImageView) this.findViewById(
+            ImageView imageView =  this.findViewById(
                     R.id.image_view_candy);
             Picasso.with(this).load(mCandyImageUrl).into(imageView);
         }
